@@ -1,8 +1,11 @@
 const image = await Deno.readFile("./toka-python.png")
 
 const handler = async (req: Request) => {
-  if (new URL(req.url).pathname === "/rev.png") {
-    if (req.headers.get("x-tokachan") === "tokachan") {
+  const url = new URL(req.url)
+  const tokachan = url.searchParams.get("tokachan")
+
+  if (url.pathname === "/rev.png") {
+    if (tokachan !== "tokachan") {
       return new Response(undefined, {
         headers: { "Content-Type": "image/png" },
       })
@@ -14,7 +17,7 @@ const handler = async (req: Request) => {
     })
   }
 
-  if (req.headers.get("x-tokachan") === "tokachan") {
+  if (tokachan === "tokachan") {
     return new Response(image, {
       headers: {
         "Content-Type": "image/png",
